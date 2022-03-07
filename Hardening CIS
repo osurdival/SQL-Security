@@ -742,19 +742,125 @@ END
 
 
 PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
-	insert into #SecurityDetails values (3.5, 'Manual')
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa1 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Server%'
+
+	SELECT @valueCount1aa1 = @@rowcount
+
+
+		IF @valueCount1aa1 = 0 
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
+					insert into #SecurityDetails values (3.5, 'Yes')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
+					insert into #SecurityDetails values (3.5, 'No')
+			END
+END
+
+ PRINT ''
+
+
+
+
+
+
+
+
+
+
+
 
 ---3.6 Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator 
 
 
-PRINT '3.6: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator '
-insert into #SecurityDetails values (3.6, 'Manual')
 
----3.7 Ensure the SQL Server’s Full-Text Service Account is Not an Administrator (Manual) 
+
+PRINT '3.6: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator '
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa11 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Server Agent%'
+
+	SELECT @valueCount1aa11 = @@rowcount
+
+
+		IF @valueCount1aa11 = 0
+
+			BEGIN
+				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.6, 'Yes')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.6, 'No')
+			END
+END
+
+ PRINT ''
+
+
+
+
+
 
 
 PRINT '3.7: **Manual** Ensure the SQL Server’s Full-Text Service Account is Not an Administrator (Manual) '
-insert into #SecurityDetails values (3.7, 'Manual')
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa111 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Full-text%'
+
+	SELECT @valueCount1aa111 = @@rowcount
+
+
+		IF @valueCount1aa111 = 0
+
+			BEGIN
+				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.7, 'Yes')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.7, 'No')
+			END
+END
+
+ PRINT ''
+
+
+
 
 
 
