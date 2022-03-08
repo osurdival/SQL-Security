@@ -4,7 +4,7 @@
 ----This script execute a security auduit based on recommenations from CIS
 
 
-CREATE TABLE #SecurityDetails (idNo VARCHAR(5), REsult VARCHAR(25)) 
+CREATE TABLE #SecurityDetails (idNo VARCHAR(5), REsult VARCHAR(25),Description# nVARCHAR(max) ) 
 
 DECLARE @CurrentSQLSP as nvarchar(20) -- Holds the required service pack to meet audit requirements
 DECLARE @VersionString nvarchar(max)  -- Holds the current verion of SQL server
@@ -63,7 +63,7 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 			BEGIN
 				PRINT '1.1: Succesful - Security Compliance has been achieved'
 
-				insert into #SecurityDetails values (1.1, 'Yes')
+				insert into #SecurityDetails values (1.1, 'Yes','Ensure Latest SQL Server Cumulative and Security Updates are Installed ')
 				
 				
 			END
@@ -72,7 +72,7 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 
 			BEGIN
 				PRINT '1.1: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (1.1, 'No')
+				insert into #SecurityDetails values (1.1, 'No','Ensure Latest SQL Server Cumulative and Security Updates are Installed')
 			END
 
 
@@ -83,8 +83,8 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 	 
 	 PRINT '1.2 **Manual** Ensure Single-Function Member Servers are Used '
 	 PRINT ''
-	 	insert into #SecurityDetails values (1.2, 'Manual')
-			insert into #SecurityDetails values (0, '')
+	 	insert into #SecurityDetails values (1.2, 'Manual','Ensure Latest SQL Server Cumulative and Security Updates are Installed ')
+			insert into #SecurityDetails values (0, '','')
 
 ---2.1 - Ad Hoc Distributed Queries
 	BEGIN
@@ -97,14 +97,14 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 
 				BEGIN
 					PRINT '2.1: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.1, 'Yes')
+					insert into #SecurityDetails values (2.1, 'Yes',' Ad Hoc Distributed Queries')
 				END
 
 					Else
 
 				BEGIN
 					PRINT '2.1: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.1, 'No')
+					insert into #SecurityDetails values (2.1, 'No','Ad Hoc Distributed Queries')
 				END
 	END
 
@@ -119,14 +119,14 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 
 				BEGIN
 					PRINT '2.2: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.2, 'Yes')
+					insert into #SecurityDetails values (2.2, 'Yes','clr enabled')
 				END
 
 					Else
 
 				BEGIN
 					PRINT '2.2: Failed - Security Compliance has NOT been achieved'
-						insert into #SecurityDetails values (2.2, 'No')
+						insert into #SecurityDetails values (2.2, 'No','clr enabled')
 				END
 	END
 
@@ -144,7 +144,7 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 					PRINT '2.3: Succesful - Security Compliance has been achieved'
 						Print @value3
 	
-					insert into #SecurityDetails values (2.3, 'Yes')
+					insert into #SecurityDetails values (2.3, 'Yes','cross db ownership chaining')
 				END
 
 					Else
@@ -153,7 +153,7 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 					PRINT '2.3: Failed - Security Compliance has NOT been achieved'
 						Print @value3
 	
-					insert into #SecurityDetails values (2.3, 'No')
+					insert into #SecurityDetails values (2.3, 'No','cross db ownership chaining')
 				END
 
 	END
@@ -171,14 +171,14 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 
 				BEGIN
 					PRINT '2.4: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.4, 'Yes')
+					insert into #SecurityDetails values (2.4, 'Yes','Database Mail XPs')
 				END
 
 					ELSE
 
 				BEGIN
 					PRINT '2.4: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.4, 'No')
+					insert into #SecurityDetails values (2.4, 'No','Database Mail XPs')
 				END
 	END
 
@@ -196,14 +196,14 @@ BEGIN
 
 			BEGIN
 				PRINT '2.5: Succesful - Security Compliance has been achieved'
-						insert into #SecurityDetails values (2.5, 'Yes')
+						insert into #SecurityDetails values (2.5, 'Yes','Ole Automation Procedures')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.5: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.5, 'No')
+					insert into #SecurityDetails values (2.5, 'No','Ole Automation Procedures')
 			END
 END
 
@@ -220,14 +220,14 @@ BEGIN
 
 			BEGIN
 				PRINT '2.6: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.6, 'Yes')
+					insert into #SecurityDetails values (2.6, 'Yes',' remote access')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.6: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.6, 'No')
+					insert into #SecurityDetails values (2.6, 'No',' remote access')
 			END
 END
 
@@ -247,14 +247,14 @@ BEGIN
 
 			BEGIN
 				PRINT '2.7: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.7, 'Yes')
+				insert into #SecurityDetails values (2.7, 'Yes','remote admin connections')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.7: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (2.7, 'No')
+				insert into #SecurityDetails values (2.7, 'No','remote admin connections')
 			END
 END
 
@@ -274,14 +274,14 @@ BEGIN
 
 			BEGIN
 				PRINT '2.8: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.8, 'Yes')
+				insert into #SecurityDetails values (2.8, 'Yes','remote admin connections')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.8: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (2.8, 'No')
+				insert into #SecurityDetails values (2.8, 'No','remote admin connections')
 			END
 END
 
@@ -304,21 +304,24 @@ BEGIN
 
 			BEGIN
 				PRINT '2.9: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.9, 'Yes')
+				insert into #SecurityDetails values (2.9, 'Yes','Trustworthy database property value of ON:')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.9: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (2.9, 'No')
+				insert into #SecurityDetails values (2.9, 'No','Trustworthy database property value of ON:')
 			END
 END
 
 
 ---2.10 - Ensure Unnecessary SQL Server Protocols are set to 'Disabled 
 PRINT '2.10 **Manual** Ensure Unnecessary SQL Server Protocols are set to Disabled '
-insert into #SecurityDetails values (2.10, 'Manual')
+insert into #SecurityDetails values (2.10, 'Manual','Ensure Unnecessary SQL Server Protocols are set to Disabled ')
+
+
+
 
 
 ---2.11 - Ensure SQL Server is configured to use non-standard ports 
@@ -343,14 +346,14 @@ SELECT @value AS TCP_Port WHERE @value = '1433';
 
 			BEGIN
 				PRINT '2.11: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.11, 'Yes')
+				insert into #SecurityDetails values (2.11, 'Yes','Ensure SQL Server is configured to use non-standard ports ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.11: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.11, 'No')
+					insert into #SecurityDetails values (2.11, 'No','Ensure SQL Server is configured to use non-standard ports ')
 			END
 END
 
@@ -371,16 +374,17 @@ BEGIN
 
 			BEGIN
 				PRINT '2.12: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.12, 'Yes')
+					insert into #SecurityDetails values (2.12, 'Yes','Ensure Hide Instance option is set to Yes for Production SQL Server instances ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.12: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (2.12, 'No')
+				insert into #SecurityDetails values (2.12, 'No','Ensure Hide Instance option is set to yes for Production SQL Server instances ')
 			END
-END
+			END
+
 
 
 
@@ -409,14 +413,14 @@ BEGIN
 		IF @2pint13 = 0
 			BEGIN
 				PRINT '2.13: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.13, 'Yes')
+				insert into #SecurityDetails values (2.13, 'Yes','Ensure the sa Login Account is set to Disabled ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.13: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (2.13, 'No')
+				insert into #SecurityDetails values (2.13, 'No','Ensure the sa Login Account is set to Disabled ')
 			END
 END
 
@@ -435,14 +439,14 @@ WHERE sid = 0x01;
 		IF @SArenamed <> 'sa'
 			BEGIN
 				PRINT '2.14: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (2.14, 'Yes')
+				insert into #SecurityDetails values (2.14, 'Yes','Ensure the sa Login Account has been renamed')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.14: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.14, 'No')
+					insert into #SecurityDetails values (2.14, 'No','Ensure the sa Login Account has been renamed')
 			END
 END
 
@@ -465,14 +469,14 @@ BEGIN
 
 			BEGIN
 				PRINT '2.15: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.15, 'Yes')
+					insert into #SecurityDetails values (2.15, 'Yes','Ensure xp_cmdshell Server Configuration Option is set to 0')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.15: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.15, 'No')
+					insert into #SecurityDetails values (2.15, 'No','Ensure xp_cmdshell Server Configuration Option is set to 0')
 			END
 END
 
@@ -496,7 +500,7 @@ BEGIN
 
 			BEGIN
 				PRINT '2.16: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.16, 'Yes')
+					insert into #SecurityDetails values (2.16, 'Yes','Ensure AUTO_CLOSE is set to OFF on contained databases ')
 			END
 
 				Else
@@ -504,7 +508,7 @@ BEGIN
 			BEGIN
 				PRINT '2.16: Failed - Security Compliance has NOT been achieved'
 
-					insert into #SecurityDetails values (2.16, 'No')
+					insert into #SecurityDetails values (2.16, 'No','Ensure AUTO_CLOSE is set to OFF on contained databases ')
 			END
 END
 
@@ -527,20 +531,20 @@ BEGIN
 
 			BEGIN
 				PRINT '2.17: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.17, 'Yes')
+					insert into #SecurityDetails values (2.17, 'Yes','Ensure no login exists with the name sa')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '2.17: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (2.17, 'No')
+					insert into #SecurityDetails values (2.17, 'No','Ensure no login exists with the name sa')
 			END
 END
 
  PRINT ''
 
- insert into #SecurityDetails values (0, '')
+ insert into #SecurityDetails values (0, '','')
 
  ---3.1 - Ensure 'Server Authentication' Property is set to 'Windows Authentication Mode' 
 BEGIN
@@ -553,14 +557,14 @@ DEclare @value111 as int
 
 			BEGIN
 				PRINT '3.1: Succesful - Security Compliance has been achieved'
-						insert into #SecurityDetails values (3.1, 'Yes')
+						insert into #SecurityDetails values (3.1, 'Yes',' Ensure Server Authentication Property is set to Windows Authentication Mode ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.1: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (3.1, 'No')
+					insert into #SecurityDetails values (3.1, 'No',' Ensure Server Authentication Property is set to Windows Authentication Mode ')
 			END
 END
 
@@ -616,14 +620,14 @@ from #TemptableSecurity
 
 			BEGIN
 				PRINT '3.2: Succesful - Security Compliance has  been achieved'
-				insert into #SecurityDetails values (3.2, 'Yes')
+				insert into #SecurityDetails values (3.2, 'Yes','Ensure CONNECT permissions on the guest user is Revoked within all SQL Server databases excluding the master, msdb and tempdb')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.2: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (3.2, 'No')
+				insert into #SecurityDetails values (3.2, 'No','Ensure CONNECT permissions on the guest user is Revoked within all SQL Server databases excluding the master, msdb and tempdb')
 			END
 
 			drop table #TemptableSecurity
@@ -688,7 +692,7 @@ from #TemptableSecurityQ
 
 			BEGIN
 				PRINT '3.3: Succesful - Security Compliance has  been achieved'
-				insert into #SecurityDetails values (3.3, 'Yes')
+				insert into #SecurityDetails values (3.3, 'Yes','Ensure Orphaned Users are Dropped From SQL Server Databases ')
 			END
 
 				Else
@@ -696,7 +700,7 @@ from #TemptableSecurityQ
 			BEGIN
 				PRINT '3.3: Failed - Security Compliance has NOT been achieved'
 
-				insert into #SecurityDetails values (3.3, 'No')
+				insert into #SecurityDetails values (3.3, 'No','Ensure Orphaned Users are Dropped From SQL Server Databases ')
 			END
 
 			drop table #TemptableSecurityQ
@@ -722,14 +726,14 @@ AND authentication_type = 2;
 
 			BEGIN
 				PRINT '3.4: Succesful - Security Compliance has  been achieved'
-				insert into #SecurityDetails values (3.4, 'Yes')
+				insert into #SecurityDetails values (3.4, 'Yes','Ensure SQL Authentication is not used in contained databases ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.4: Failed - Security Compliance has NOT been achieved'
-						insert into #SecurityDetails values (3.4, 'No')
+						insert into #SecurityDetails values (3.4, 'No','Ensure SQL Authentication is not used in contained databases ')
 			END
 
 		
@@ -760,14 +764,14 @@ and servicename like 'SQL Server%'
 
 			BEGIN
 				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
-					insert into #SecurityDetails values (3.5, 'Yes')
+					insert into #SecurityDetails values (3.5, 'Yes','Ensure the SQL Server’s MSSQL Service Account is Not an Administrator')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
-					insert into #SecurityDetails values (3.5, 'No')
+					insert into #SecurityDetails values (3.5, 'No','Ensure the SQL Server’s MSSQL Service Account is Not an Administrator')
 			END
 END
 
@@ -808,14 +812,14 @@ and servicename like 'SQL Server Agent%'
 
 			BEGIN
 				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
-					insert into #SecurityDetails values (3.6, 'Yes')
+					insert into #SecurityDetails values (3.6, 'Yes','Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
-					insert into #SecurityDetails values (3.6, 'No')
+					insert into #SecurityDetails values (3.6, 'No','Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator ')
 			END
 END
 
@@ -846,14 +850,14 @@ and servicename like 'SQL Full-text%'
 
 			BEGIN
 				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
-					insert into #SecurityDetails values (3.7, 'Yes')
+					insert into #SecurityDetails values (3.7, 'Yes','Ensure the SQL Server’s Full-Text Service Account is Not an Administrator')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
-					insert into #SecurityDetails values (3.7, 'No')
+					insert into #SecurityDetails values (3.7, 'No','Ensure the SQL Server’s Full-Text Service Account is Not an Administrator')
 			END
 END
 
@@ -885,14 +889,14 @@ AND NOT (state_desc = 'GRANT' and [permission_name] = 'CONNECT' and class_desc =
 
 			BEGIN
 				PRINT '3.8: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (3.8, 'Yes')
+				insert into #SecurityDetails values (3.8, 'Yes','Ensure only the default permissions specified by Microsoft are granted to the public server role')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.8: Failed - Security Compliance has NOT been achieved'
-						insert into #SecurityDetails values (3.8, 'No')
+						insert into #SecurityDetails values (3.8, 'No','Ensure only the default permissions specified by Microsoft are granted to the public server role')
 			END
 END
 
@@ -914,14 +918,14 @@ WHERE pr.name like 'BUILTIN%';
 
 			BEGIN
 				PRINT '3.9: Succesful - Security Compliance has been achieved'
-						insert into #SecurityDetails values (3.9, 'Yes')
+						insert into #SecurityDetails values (3.9, 'Yes','Ensure Windows BUILTIN groups are not SQL Logins')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.9: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (3.9, 'No')
+					insert into #SecurityDetails values (3.9, 'No','Ensure Windows BUILTIN groups are not SQL Logins')
 			END
 END
 
@@ -944,14 +948,14 @@ AND pr.[name] like CAST(SERVERPROPERTY('MachineName') AS nvarchar) + '%';
 
 			BEGIN
 				PRINT '3.10: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (3.10, 'Yes')
+				insert into #SecurityDetails values (3.10, 'Yes','Ensure Windows local groups are not SQL Logins ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.10: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (3.10, 'No')
+					insert into #SecurityDetails values (3.10, 'No','Ensure Windows local groups are not SQL Logins ')
 			END
 END
 
@@ -981,25 +985,25 @@ WHERE principal_id = USER_ID('public');
 
 			BEGIN
 				PRINT '3.11: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (3.11, 'Yes')
+				insert into #SecurityDetails values (3.11, 'Yes','Ensure the public role in the msdb database is not granted access to SQL Agent proxies')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '3.11: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (3.11, 'No')
+				insert into #SecurityDetails values (3.11, 'No','Ensure the public role in the msdb database is not granted access to SQL Agent proxies')
 			END
 END
 
 
 
- insert into #SecurityDetails values (0, '')
+ insert into #SecurityDetails values (0, '','')
 
 Print ''
 ---4.1 Ensure 'MUST_CHANGE' Option is set to 'ON' for All SQL Authenticated Logins (Manual)
 PRINT '4.1 **Manual** Ensure MUST_CHANGE Option is set to ON for All SQL Authenticated Logins'
-			insert into #SecurityDetails values (4.1, 'Manual')
+			insert into #SecurityDetails values (4.1, 'Manual','Ensure MUST_CHANGE Option is set to ON for All SQL Authenticated Logins')
 
 
 
@@ -1032,14 +1036,14 @@ AND l.is_expiration_checked <> 1;
 
 			BEGIN
 				PRINT '4.2: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (4.2, 'Yes')
+				insert into #SecurityDetails values (4.2, 'Yes','Ensure CHECK_EXPIRATION Option is set to ON for All SQL Authenticated Logins Within the Sysadmin Role ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '4.2: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (4.2, 'No')
+					insert into #SecurityDetails values (4.2, 'No','Ensure CHECK_EXPIRATION Option is set to ON for All SQL Authenticated Logins Within the Sysadmin Role ')
 			END
 END
 
@@ -1064,20 +1068,20 @@ WHERE is_policy_checked = 0;
 
 			BEGIN
 				PRINT '4.3: Succesful - Security Compliance has been achieved'
-						insert into #SecurityDetails values (4.3, 'Yes')
+						insert into #SecurityDetails values (4.3, 'Yes','Ensure CHECK_POLICY Option is set to ON for All SQL Authenticated Logins ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '4.3: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (4.3, 'No')
+					insert into #SecurityDetails values (4.3, 'No','Ensure CHECK_POLICY Option is set to ON for All SQL Authenticated Logins ')
 			END
 END
 
 
 PRINT ''
-insert into #SecurityDetails values (0, '')
+insert into #SecurityDetails values (0, '','')
 
 --5.1 Ensure 'Maximum number of error log files' is set to greater than or equal to '12' (Automated)
 
@@ -1107,7 +1111,7 @@ SELECT ISNULL(@NumErrorLogs, -1) AS [NumberOfLogFiles];
 			BEGIN
 			PRINT ''
 				PRINT '5.1: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (5.1, 'Yes')
+				insert into #SecurityDetails values (5.1, 'Yes','Ensure Maximum number of error log file is set to greater than or equal to 12 ')
 			END
 
 				Else
@@ -1115,7 +1119,7 @@ SELECT ISNULL(@NumErrorLogs, -1) AS [NumberOfLogFiles];
 			BEGIN
 			PRINT ''
 				PRINT '5.1: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (5.1, 'No')
+				insert into #SecurityDetails values (5.1, 'No','Ensure Maximum number of error log file is set to greater than or equal to 12 ')
 			END
 END
 
@@ -1135,7 +1139,7 @@ IF @value = 1 AND @value1 = 1
 			BEGIN
 		
 				PRINT '5.2: Succesful - Security Compliance has been achieved'
-				insert into #SecurityDetails values (5.2, 'Yes')
+				insert into #SecurityDetails values (5.2, 'Yes','Ensure Default Trace Enabled Server Configuration Option is set to 1')
 			END
 
 				Else
@@ -1143,14 +1147,14 @@ IF @value = 1 AND @value1 = 1
 			BEGIN
 
 				PRINT '5.2: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (5.2, 'No')
+				insert into #SecurityDetails values (5.2, 'No','Ensure Default Trace Enabled Server Configuration Option is set to 1')
 			END
 
 --5.3 Ensure 'Login Auditing' is set to 'failed logins' 
 
 PRINT '5.3 **Manual** Ensure ''Login Auditing'' is set to ''failed logins'
 
-insert into #SecurityDetails values (5.3, 'Manual')
+insert into #SecurityDetails values (5.3, 'Manual','Ensure Login Auditing is set to failed logins')
 
 
 
@@ -1186,7 +1190,7 @@ IF @value12 = 3
 			BEGIN
 		
 				PRINT '5.4: Succesful - Security Compliance has been achieved'
-						insert into #SecurityDetails values (5.4, 'Yes')
+						insert into #SecurityDetails values (5.4, 'Yes',' Ensure SQL Server Audit is set to capture both failed and successful logins')
 			END
 
 				Else
@@ -1194,20 +1198,20 @@ IF @value12 = 3
 			BEGIN
 
 				PRINT '5.4: Failed - Security Compliance has NOT been achieved'
-						insert into #SecurityDetails values (5.4, 'No')
+						insert into #SecurityDetails values (5.4, 'No',' Ensure SQL Server Audit is set to capture both failed and successful logins')
 			END
 
 PRINT ''
-insert into #SecurityDetails values (0, '')
+insert into #SecurityDetails values (0, '','')
 PRINT '6.1 **Manual** Ensure Database and Application User Input is Sanitized (Manual)'
 
-	insert into #SecurityDetails values (6.1, 'Manual')
+	insert into #SecurityDetails values (6.1, 'Manual','Ensure Database and Application User Input is Sanitized (')
 
 PRINT '6.2 **Manual** Ensure ''CLR Assembly Permission Set'' is set to ''SAFE_ACCESS'' for All CLR Assemblies '
 
-	insert into #SecurityDetails values (6.2, 'Manual')
+	insert into #SecurityDetails values (6.2, 'Manual','Ensure CLR Assembly Permission Set is set to SAFE_ACCESS for All CLR Assemblies')
 PRINT ''
-	insert into #SecurityDetails values (0, '')
+	insert into #SecurityDetails values (0, '','')
 --- 7.1 Ensure 'Symmetric Key encryption algorithm' is set to 'AES_128' or higher in non-system databases (Automated)
 
 DECLARE @nameW VARCHAR(50) 
@@ -1261,14 +1265,14 @@ from #TemptableSecurityW
 
 			BEGIN
 				PRINT '7.1: Succesful - Security Compliance has  been achieved'
-				insert into #SecurityDetails values (7.1, 'Yes')
+				insert into #SecurityDetails values (7.1, 'Yes','Ensure Symmetric Key encryption algorithm is set to AES_128 or higher in non-system databases ')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '7.1: Failed - Security Compliance has NOT been achieved'
-					insert into #SecurityDetails values (7.1, 'No')
+					insert into #SecurityDetails values (7.1, 'No','Ensure Symmetric Key encryption algorithm is set to AES_128 or higher in non-system databases ')
 			END
 
 			drop table #TemptableSecurityW
@@ -1334,24 +1338,24 @@ from #TemptableSecurityE
 
 			BEGIN
 				PRINT '7.2: Succesful - Security Compliance has  been achieved'
-				insert into #SecurityDetails values (7.2, 'Yes')
+				insert into #SecurityDetails values (7.2, 'Yes','Ensure Asymmetric Key Size is set to greater than or equal to 2048 in non-system databases')
 			END
 
 				Else
 
 			BEGIN
 				PRINT '7.2: Failed - Security Compliance has NOT been achieved'
-				insert into #SecurityDetails values (7.2, 'No')
+				insert into #SecurityDetails values (7.2, 'No','Ensure Asymmetric Key Size is set to greater than or equal to 2048 in non-system databases')
 			END
 
 			drop table #TemptableSecurityE
 
 END
-insert into #SecurityDetails values (0, '')
+insert into #SecurityDetails values (0, '','')
 
 Print ''
 Print '8.1 **Manual**  Ensure SQL Server Browser Service is configured correctly (Manual)'
-insert into #SecurityDetails values (8.1, 'Manual')
+insert into #SecurityDetails values (8.1, 'Manual','Ensure SQL Server Browser Service is configured correctly')
 select @@VERSION
 Select *
 from #SecurityDetails
