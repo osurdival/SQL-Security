@@ -79,11 +79,11 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 			
 
 
----1.2 - Ensure Latest SQL Server Cumulative and Security Updates are Installed 
+---1.2 - Ensure Single-Function Member Servers are Used
 	 
 	 PRINT '1.2 **Manual** Ensure Single-Function Member Servers are Used '
 	 PRINT ''
-	 	insert into #SecurityDetails values (1.2, 'Manual','Ensure Latest SQL Server Cumulative and Security Updates are Installed ')
+	 	insert into #SecurityDetails values (1.2, 'Manual','Ensure Single-Function Member Servers are Used')
 			insert into #SecurityDetails values (0, '','')
 
 ---2.1 - Ad Hoc Distributed Queries
@@ -97,7 +97,7 @@ PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
 
 				BEGIN
 					PRINT '2.1: Succesful - Security Compliance has been achieved'
-					insert into #SecurityDetails values (2.1, 'Yes',' Ad Hoc Distributed Queries')
+					insert into #SecurityDetails values (2.1, 'Yes','Ad Hoc Distributed Queries')
 				END
 
 					Else
