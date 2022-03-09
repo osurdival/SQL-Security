@@ -1,0 +1,1363 @@
+
+
+
+----This script execute a security auduit based on recommenations from CIS
+
+
+CREATE TABLE #SecurityDetails (idNo VARCHAR(5), REsult VARCHAR(25),Description# nVARCHAR(max) ) 
+
+DECLARE @CurrentSQLSP as nvarchar(20) -- Holds the required service pack to meet audit requirements
+DECLARE @VersionString nvarchar(max)  -- Holds the current verion of SQL server
+DECLARE @value1 AS nvarchar(20) 
+DECLARE @value2 AS nvarchar(20) 
+DECLARE @value3 AS int
+DECLARE @value4 AS int
+
+
+
+	SELECT @VersionString =   @@VERSION
+
+
+--Set Variable
+SELECT @CurrentSQLSP = 'CU10' -- Set variable to the latest service pack
+
+
+SET NOCOUNT ON
+
+PRINT 'SQL Server ' + @@SERVERNAME + ' ' --- Prints out SQL server name
+
+
+---Find if Server Audit's are enabled enabled
+	BEGIN
+
+		SELECT *
+		FROM sys.server_audits
+		WHERE is_state_enabled = 1
+
+		SELECT @value1 = @@rowcount
+
+
+			IF @value1 = 1 
+
+				BEGIN
+					PRINT 'Server Audit Logging Enabled'
+				END
+
+					Else
+
+				BEGIN
+					PRINT 'Server Audit Logging NOT Enabled'
+				END
+	END
+
+ PRINT '' -- Space for readability
+
+
+
+
+
+
+---1.1 - Ensure Latest SQL Server Cumulative and Security Updates are Installed 
+	SELECT @VersionString =  @@VERSION
+		IF CHARINDEX(@CurrentSQLSP,@VersionString) > 0
+			BEGIN
+				PRINT '1.1: Succesful - Security Compliance has been achieved'
+
+				insert into #SecurityDetails values (1.1, 'Yes','Ensure Latest SQL Server Cumulative and Security Updates are Installed ')
+				
+				
+			END
+
+		Else
+
+			BEGIN
+				PRINT '1.1: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (1.1, 'No','Ensure Latest SQL Server Cumulative and Security Updates are Installed')
+			END
+
+
+			
+
+
+---1.2 - Ensure Single-Function Member Servers are Used
+	 
+	 PRINT '1.2 **Manual** Ensure Single-Function Member Servers are Used '
+	 PRINT ''
+	 	insert into #SecurityDetails values (1.2, 'Manual','Ensure Single-Function Member Servers are Used')
+			insert into #SecurityDetails values (0, '','')
+
+---2.1 - Ad Hoc Distributed Queries
+	BEGIN
+
+		SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+		FROM sys.configurations 
+		WHERE name = 'Ad Hoc Distributed Queries'; 
+
+			IF @value1 = 0 and @value2 = 0
+
+				BEGIN
+					PRINT '2.1: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.1, 'Yes','Ad Hoc Distributed Queries')
+				END
+
+					Else
+
+				BEGIN
+					PRINT '2.1: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.1, 'No','Ad Hoc Distributed Queries')
+				END
+	END
+
+			
+---2.2 - clr enabled
+	BEGIN
+
+		SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+		FROM sys.configurations WHERE name = 'clr enabled'; 
+
+			IF @value1 = 0 and @value2 = 0
+
+				BEGIN
+					PRINT '2.2: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.2, 'Yes','clr enabled')
+				END
+
+					Else
+
+				BEGIN
+					PRINT '2.2: Failed - Security Compliance has NOT been achieved'
+						insert into #SecurityDetails values (2.2, 'No','clr enabled')
+				END
+	END
+
+---2.3 - cross db ownership chaining
+	BEGIN
+
+		SELECT @value3 = CAST([value] as int), @value4 =  CAST(value_in_use as int)    
+		FROM sys.configurations WHERE name = 'cross db ownership chaining'; 
+		
+	
+	
+			IF @value3 = 0 and @value4 = 0
+
+				BEGIN
+					PRINT '2.3: Succesful - Security Compliance has been achieved'
+						Print @value3
+	
+					insert into #SecurityDetails values (2.3, 'Yes','cross db ownership chaining')
+				END
+
+					Else
+
+				BEGIN
+					PRINT '2.3: Failed - Security Compliance has NOT been achieved'
+						Print @value3
+	
+					insert into #SecurityDetails values (2.3, 'No','cross db ownership chaining')
+				END
+
+	END
+
+---2.4 - Database Mail XPs
+	BEGIN
+
+
+
+		SELECT @value1 = CAST(value as int),  @value2 = CAST(value_in_use as int)    
+		FROM sys.configurations WHERE name = 'Database Mail XPs';
+
+
+			IF @value1 = 0 and @value2 = 0
+
+				BEGIN
+					PRINT '2.4: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.4, 'Yes','Database Mail XPs')
+				END
+
+					ELSE
+
+				BEGIN
+					PRINT '2.4: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.4, 'No','Database Mail XPs')
+				END
+	END
+
+---2.5 - Ole Automation Procedures
+BEGIN
+
+	SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+	FROM sys.configurations 
+	WHERE name = 'Ole Automation Procedures'; 
+
+	SELECT @value1
+	SELECT @value2
+
+		IF @value1 = 0 and @value2 = 0
+
+			BEGIN
+				PRINT '2.5: Succesful - Security Compliance has been achieved'
+						insert into #SecurityDetails values (2.5, 'Yes','Ole Automation Procedures')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.5: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.5, 'No','Ole Automation Procedures')
+			END
+END
+
+
+---2.6 - remote access
+BEGIN
+
+	SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+	FROM sys.configurations 
+	WHERE name = 'remote access'; 
+
+
+		IF @value1 = 0 and @value2 = 0
+
+			BEGIN
+				PRINT '2.6: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.6, 'Yes',' remote access')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.6: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.6, 'No',' remote access')
+			END
+END
+
+
+---2.7 - remote admin connections
+BEGIN
+
+	SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+	FROM sys.configurations 
+	WHERE name = 'remote admin connections'
+	AND SERVERPROPERTY('IsClustered') = 0;
+
+	SELECT @value1
+	SELECT @value2
+
+		IF @value1 = 0 and @value2 = 0
+
+			BEGIN
+				PRINT '2.7: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.7, 'Yes','remote admin connections')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.7: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (2.7, 'No','remote admin connections')
+			END
+END
+
+
+---2.8 - scan for startup procs
+BEGIN
+
+	SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+	FROM sys.configurations 
+	WHERE name = 'scan for startup procs'
+
+
+	SELECT @value1
+	SELECT @value2
+
+		IF @value1 = 0 and @value2 = 0
+
+			BEGIN
+				PRINT '2.8: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.8, 'Yes','remote admin connections')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.8: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (2.8, 'No','remote admin connections')
+			END
+END
+
+
+---2.9 - Trustworthy database property value of ON:
+
+BEGIN
+
+	SELECT name
+	FROM sys.databases
+	WHERE is_trustworthy_on = 1
+	AND name != 'msdb';
+
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '2.9: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.9, 'Yes','Trustworthy database property value of ON:')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.9: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (2.9, 'No','Trustworthy database property value of ON:')
+			END
+END
+
+
+---2.10 - Ensure Unnecessary SQL Server Protocols are set to 'Disabled 
+PRINT '2.10 **Manual** Ensure Unnecessary SQL Server Protocols are set to Disabled '
+insert into #SecurityDetails values (2.10, 'Manual','Ensure Unnecessary SQL Server Protocols are set to Disabled ')
+
+
+
+
+
+---2.11 - Ensure SQL Server is configured to use non-standard ports 
+BEGIN
+
+DECLARE @value nvarchar(256);
+EXECUTE master.dbo.xp_instance_regread
+	N'HKEY_LOCAL_MACHINE',
+	N'SOFTWARE\Microsoft\Microsoft SQL Server\MSSQLServer\SuperSocketNetLib\Tcp\IPAll',
+	N'TcpPort',
+	@value OUTPUT,
+	N'no_output';
+
+SELECT @value AS TCP_Port WHERE @value = '1433';
+
+
+
+	SELECT @value = @@rowcount
+
+
+		IF @value = 0 
+
+			BEGIN
+				PRINT '2.11: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.11, 'Yes','Ensure SQL Server is configured to use non-standard ports ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.11: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.11, 'No','Ensure SQL Server is configured to use non-standard ports ')
+			END
+END
+
+
+---2.12 - Ensure 'Hide Instance' option is set to 'Yes' for Production SQL Server instances 
+BEGIN
+
+	DECLARE @getValue INT;
+	EXEC master.sys.xp_instance_regread
+      @rootkey = N'HKEY_LOCAL_MACHINE',
+      @key = N'SOFTWARE\Microsoft\Microsoft SQL Server\MSSQLServer\SuperSocketNetLib',
+      @value_name = N'HideInstance',
+      @value = @getValue OUTPUT;
+	SELECT @getValue;
+
+
+		IF @getValue = 1 
+
+			BEGIN
+				PRINT '2.12: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.12, 'Yes','Ensure Hide Instance option is set to Yes for Production SQL Server instances ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.12: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (2.12, 'No','Ensure Hide Instance option is set to yes for Production SQL Server instances ')
+			END
+			END
+
+
+
+
+
+
+
+
+
+
+---2.13 - Ensure the 'sa' Login Account is set to 'Disabled' 
+BEGIN
+	DECLARE @2pint13 INT;
+	SELECT  is_disabled
+	FROM sys.server_principals
+	WHERE sid = 0x01
+	AND is_disabled = 0;
+
+
+
+	SELECT @2pint13 = @@rowcount
+
+
+
+
+
+		IF @2pint13 = 0
+			BEGIN
+				PRINT '2.13: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.13, 'Yes','Ensure the sa Login Account is set to Disabled ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.13: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (2.13, 'No','Ensure the sa Login Account is set to Disabled ')
+			END
+END
+
+---2.14 - Ensure the 'sa' Login Account has been renamed 
+BEGIN
+
+
+DECLARE @SArenamed nvarchar(max);
+	SELECT @SArenamed =  name
+FROM sys.server_principals
+WHERE sid = 0x01;
+
+
+
+
+		IF @SArenamed <> 'sa'
+			BEGIN
+				PRINT '2.14: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (2.14, 'Yes','Ensure the sa Login Account has been renamed')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.14: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.14, 'No','Ensure the sa Login Account has been renamed')
+			END
+END
+
+
+
+
+
+
+---2.15 - Ensure 'xp_cmdshell' Server Configuration Option is set to '0'
+BEGIN
+
+	SELECT @value1 = CAST(value as int), @value2 =  CAST(value_in_use as int)    
+	FROM sys.configurations 
+	WHERE name = 'xp_cmdshell'; 
+
+	SELECT @value1
+	SELECT @value2
+
+		IF @value1 = 0 and @value2 = 0
+
+			BEGIN
+				PRINT '2.15: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.15, 'Yes','Ensure xp_cmdshell Server Configuration Option is set to 0')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.15: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.15, 'No','Ensure xp_cmdshell Server Configuration Option is set to 0')
+			END
+END
+
+
+
+
+
+--2.16 - Ensure 'AUTO_CLOSE' is set to 'OFF' on contained databases 
+BEGIN
+
+
+	--DECLARE @value nvarchar(256);
+
+	SELECT name, containment, containment_desc, is_auto_close_on
+	FROM sys.databases
+	WHERE containment <> 0 and is_auto_close_on = 1;
+	SELECT @value = @@rowcount
+
+
+		IF @value = 0 
+
+			BEGIN
+				PRINT '2.16: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.16, 'Yes','Ensure AUTO_CLOSE is set to OFF on contained databases ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.16: Failed - Security Compliance has NOT been achieved'
+
+					insert into #SecurityDetails values (2.16, 'No','Ensure AUTO_CLOSE is set to OFF on contained databases ')
+			END
+END
+
+
+
+--2.17 - Ensure no login exists with the name 'sa' 
+BEGIN
+
+
+	DECLARE @valueCount1aa int;
+
+	SELECT principal_id, name
+	FROM sys.server_principals
+	WHERE name = 'sa';
+
+	SELECT @valueCount1aa = @@rowcount
+
+
+		IF @valueCount1aa = 0 
+
+			BEGIN
+				PRINT '2.17: Succesful - Security Compliance has been achieved'
+					insert into #SecurityDetails values (2.17, 'Yes','Ensure no login exists with the name sa')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '2.17: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (2.17, 'No','Ensure no login exists with the name sa')
+			END
+END
+
+ PRINT ''
+
+ insert into #SecurityDetails values (0, '','')
+
+ ---3.1 - Ensure 'Server Authentication' Property is set to 'Windows Authentication Mode' 
+BEGIN
+
+DEclare @value111 as int
+	SELECT @value111 =    cast(SERVERPROPERTY('IsIntegratedSecurityOnly') as int)
+
+
+		IF @value111 = 1 
+
+			BEGIN
+				PRINT '3.1: Succesful - Security Compliance has been achieved'
+						insert into #SecurityDetails values (3.1, 'Yes',' Ensure Server Authentication Property is set to Windows Authentication Mode ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.1: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (3.1, 'No',' Ensure Server Authentication Property is set to Windows Authentication Mode ')
+			END
+END
+
+
+
+ --- 3.2 Ensure CONNECT permissions on the 'guest' user is Revoked within all SQL Server databases excluding the master, msdb and tempdb 
+
+  
+DECLARE @name VARCHAR(50) 
+DECLARE @SQLString NVARCHAR(Max) 
+DECLARE @SQLString1 nVARCHAR(Max) 
+DECLARE @value1A as int
+
+create table #TemptableSecurity(DatabaseName nVarchar(max))
+
+	DECLARE db_cursor CURSOR FOR 
+	SELECT name 
+	FROM MASTER.dbo.sysdatabases 
+	WHERE name NOT IN ('master','model','msdb','tempdb') 
+
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @name  
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN 
+
+	set @SQLString1 = 'USE [' + @name + '];' + ' insert into  #TemptableSecurity ' +
+' SELECT DB_NAME() FROM sys.database_permissions  WHERE [grantee_principal_id] = DATABASE_PRINCIPAL_ID(''guest'')  AND [state_desc] LIKE ''GRANT%'' 
+AND [permission_name] = ''CONNECT'' AND DB_NAME() NOT IN (''master'',''tempdb'',''msdb''); ' 				
+			
+			--Print @SQLString1
+			exec(@SQLString1)
+
+
+			  FETCH NEXT FROM db_cursor INTO @name 
+		END 
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor 
+
+		
+
+
+
+
+BEGIN
+
+	select *
+from #TemptableSecurity
+
+	SELECT @value1A = @@rowcount
+
+		IF @value1A = 0
+
+			BEGIN
+				PRINT '3.2: Succesful - Security Compliance has  been achieved'
+				insert into #SecurityDetails values (3.2, 'Yes','Ensure CONNECT permissions on the guest user is Revoked within all SQL Server databases excluding the master, msdb and tempdb')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.2: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (3.2, 'No','Ensure CONNECT permissions on the guest user is Revoked within all SQL Server databases excluding the master, msdb and tempdb')
+			END
+
+			drop table #TemptableSecurity
+
+END
+
+
+
+
+
+
+
+
+
+ ---3.3  Ensure 'Orphaned Users' are Dropped From SQL Server Databases 
+
+DECLARE @nameQ VARCHAR(50) 
+DECLARE @SQLStringQ NVARCHAR(Max) 
+DECLARE @SQLString1Q nVARCHAR(Max) 
+
+
+
+create table #TemptableSecurityQ(DatabaseName nVarchar(max),ValueNumber nVarchar(max),[ID] [int] IDENTITY(1,1) )
+
+
+
+	DECLARE db_cursor CURSOR FOR 
+	SELECT name 
+	FROM MASTER.dbo.sysdatabases 
+	WHERE name NOT IN ('master','model','msdb','tempdb') 
+
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @nameQ
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN 
+
+				
+				---'IF @@rowcount = 1 BEGIN ' +
+				set @SQLString1Q = 'USE [' + @nameQ + '];' + ' insert into  #TemptableSecurityQ ' +
+				'EXEC sp_change_users_login @Action=''Report'';'
+				---END' + ' Else	BEGIN ' + 'insert into #TemptableSecurity values(''' + @name +'''  ,1) END '
+
+				exec(@SQLString1Q)
+
+
+	  FETCH NEXT FROM db_cursor INTO @nameQ 
+		END 
+
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor 
+
+
+BEGIN
+
+	select *
+from #TemptableSecurityQ
+
+	SELECT @value1 = @@rowcount
+
+		IF @value1 = 0
+
+			BEGIN
+				PRINT '3.3: Succesful - Security Compliance has  been achieved'
+				insert into #SecurityDetails values (3.3, 'Yes','Ensure Orphaned Users are Dropped From SQL Server Databases ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.3: Failed - Security Compliance has NOT been achieved'
+
+				insert into #SecurityDetails values (3.3, 'No','Ensure Orphaned Users are Dropped From SQL Server Databases ')
+			END
+
+			drop table #TemptableSecurityQ
+
+END
+
+
+
+ ---3.4  Ensure SQL Authentication is not used in contained databases 
+
+ BEGIN
+
+	SELECT name AS DBUser
+FROM sys.database_principals
+WHERE name NOT IN ('dbo','Information_Schema','sys','guest')
+AND type IN ('U','S','G')
+AND authentication_type = 2;
+
+
+	SELECT @value1 = @@rowcount
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '3.4: Succesful - Security Compliance has  been achieved'
+				insert into #SecurityDetails values (3.4, 'Yes','Ensure SQL Authentication is not used in contained databases ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.4: Failed - Security Compliance has NOT been achieved'
+						insert into #SecurityDetails values (3.4, 'No','Ensure SQL Authentication is not used in contained databases ')
+			END
+
+		
+END
+
+
+
+
+---3.5 Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)
+
+
+PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa1 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Server%'
+
+	SELECT @valueCount1aa1 = @@rowcount
+
+
+		IF @valueCount1aa1 = 0 
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
+					insert into #SecurityDetails values (3.5, 'Yes','Ensure the SQL Server’s MSSQL Service Account is Not an Administrator')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s MSSQL Service Account is Not an Administrator (Manual)'
+					insert into #SecurityDetails values (3.5, 'No','Ensure the SQL Server’s MSSQL Service Account is Not an Administrator')
+			END
+END
+
+ PRINT ''
+
+
+
+
+
+
+
+
+
+
+
+
+---3.6 Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator 
+
+
+
+
+PRINT '3.6: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator '
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa11 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Server Agent%'
+
+	SELECT @valueCount1aa11 = @@rowcount
+
+
+		IF @valueCount1aa11 = 0
+
+			BEGIN
+				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.6, 'Yes','Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.6, 'No','Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator ')
+			END
+END
+
+ PRINT ''
+
+
+
+
+
+
+
+PRINT '3.7: **Manual** Ensure the SQL Server’s Full-Text Service Account is Not an Administrator (Manual) '
+
+	BEGIN
+
+
+	DECLARE @valueCount1aa111 int;
+
+SELECT servicename, service_account
+FROM sys.dm_server_services
+where service_account = 'LocalSystem'
+and servicename like 'SQL Full-text%'
+
+	SELECT @valueCount1aa111 = @@rowcount
+
+
+		IF @valueCount1aa111 = 0
+
+			BEGIN
+				PRINT '3.6: **Manual** EEnsure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.7, 'Yes','Ensure the SQL Server’s Full-Text Service Account is Not an Administrator')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.5: **Manual** Ensure the SQL Server’s SQLAgent Service Account is Not an Administrator'
+					insert into #SecurityDetails values (3.7, 'No','Ensure the SQL Server’s Full-Text Service Account is Not an Administrator')
+			END
+END
+
+ PRINT ''
+
+
+
+
+
+
+  --- 3.8 Ensure only the default permissions specified by Microsoft are granted to the public server role (Automated)
+BEGIN
+
+	 SELECT * 
+FROM master.sys.server_permissions
+WHERE (grantee_principal_id = SUSER_SID(N'public') and state_desc LIKE 'GRANT%')
+AND NOT (state_desc = 'GRANT' and [permission_name] = 'VIEW ANY DATABASE' and class_desc = 'SERVER')
+AND NOT (state_desc = 'GRANT' and [permission_name] = 'CONNECT' and class_desc = 'ENDPOINT' and major_id = 2)
+AND NOT (state_desc = 'GRANT' and [permission_name] = 'CONNECT' and class_desc = 'ENDPOINT' and major_id = 3)
+AND NOT (state_desc = 'GRANT' and [permission_name] = 'CONNECT' and class_desc = 'ENDPOINT' and major_id = 4)
+AND NOT (state_desc = 'GRANT' and [permission_name] = 'CONNECT' and class_desc = 'ENDPOINT' and major_id = 5);
+
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '3.8: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (3.8, 'Yes','Ensure only the default permissions specified by Microsoft are granted to the public server role')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.8: Failed - Security Compliance has NOT been achieved'
+						insert into #SecurityDetails values (3.8, 'No','Ensure only the default permissions specified by Microsoft are granted to the public server role')
+			END
+END
+
+
+  --- 3.9 Ensure Windows BUILTIN groups are not SQL Logins (Automated)
+BEGIN
+
+	 SELECT pr.[name], pe.[permission_name], pe.[state_desc]
+FROM sys.server_principals pr
+JOIN sys.server_permissions pe
+ON pr.principal_id = pe.grantee_principal_id
+WHERE pr.name like 'BUILTIN%';
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '3.9: Succesful - Security Compliance has been achieved'
+						insert into #SecurityDetails values (3.9, 'Yes','Ensure Windows BUILTIN groups are not SQL Logins')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.9: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (3.9, 'No','Ensure Windows BUILTIN groups are not SQL Logins')
+			END
+END
+
+  --- 3.10 Ensure Windows local groups are not SQL Logins (Automated)
+BEGIN
+
+	 USE [master]
+SELECT pr.[name] AS LocalGroupName, pe.[permission_name], pe.[state_desc]
+FROM sys.server_principals pr
+JOIN sys.server_permissions pe
+ON pr.[principal_id] = pe.[grantee_principal_id]
+WHERE pr.[type_desc] = 'WINDOWS_GROUP'
+AND pr.[name] like CAST(SERVERPROPERTY('MachineName') AS nvarchar) + '%';
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '3.10: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (3.10, 'Yes','Ensure Windows local groups are not SQL Logins ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.10: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (3.10, 'No','Ensure Windows local groups are not SQL Logins ')
+			END
+END
+
+
+
+
+  --- 3.11 Ensure the public role in the msdb database is not granted access to SQL Agent proxies (Automated)
+BEGIN
+
+
+	USE [msdb]
+SELECT sp.name AS proxyname
+FROM dbo.sysproxylogin spl
+JOIN sys.database_principals dp
+ON dp.sid = spl.sid
+JOIN sysproxies sp
+ON sp.proxy_id = spl.proxy_id
+WHERE principal_id = USER_ID('public');
+
+
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '3.11: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (3.11, 'Yes','Ensure the public role in the msdb database is not granted access to SQL Agent proxies')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '3.11: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (3.11, 'No','Ensure the public role in the msdb database is not granted access to SQL Agent proxies')
+			END
+END
+
+
+
+ insert into #SecurityDetails values (0, '','')
+
+Print ''
+---4.1 Ensure 'MUST_CHANGE' Option is set to 'ON' for All SQL Authenticated Logins (Manual)
+PRINT '4.1 **Manual** Ensure MUST_CHANGE Option is set to ON for All SQL Authenticated Logins'
+			insert into #SecurityDetails values (4.1, 'Manual','Ensure MUST_CHANGE Option is set to ON for All SQL Authenticated Logins')
+
+
+
+--4.2 Ensure 'CHECK_EXPIRATION' Option is set to 'ON' for All SQL Authenticated Logins Within the Sysadmin Role 
+
+
+BEGIN
+
+
+SELECT l.[name], 'sysadmin membership' AS 'Access_Method'
+FROM sys.sql_logins AS l
+WHERE IS_SRVROLEMEMBER('sysadmin',name) = 1
+AND l.is_expiration_checked <> 1
+UNION ALL
+SELECT l.[name], 'CONTROL SERVER' AS 'Access_Method'
+FROM sys.sql_logins AS l
+JOIN sys.server_permissions AS p
+ON l.principal_id = p.grantee_principal_id
+WHERE p.type = 'CL' AND p.state IN ('G', 'W')
+AND l.is_expiration_checked <> 1;
+;
+
+
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '4.2: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (4.2, 'Yes','Ensure CHECK_EXPIRATION Option is set to ON for All SQL Authenticated Logins Within the Sysadmin Role ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '4.2: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (4.2, 'No','Ensure CHECK_EXPIRATION Option is set to ON for All SQL Authenticated Logins Within the Sysadmin Role ')
+			END
+END
+
+
+
+--4.3 Ensure 'CHECK_POLICY' Option is set to 'ON' for All SQL Authenticated Logins 
+
+
+BEGIN
+
+
+SELECT name, is_disabled
+FROM sys.sql_logins
+WHERE is_policy_checked = 0;
+
+
+
+	SELECT @value1 = @@rowcount
+
+
+		IF @value1 = 0 
+
+			BEGIN
+				PRINT '4.3: Succesful - Security Compliance has been achieved'
+						insert into #SecurityDetails values (4.3, 'Yes','Ensure CHECK_POLICY Option is set to ON for All SQL Authenticated Logins ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '4.3: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (4.3, 'No','Ensure CHECK_POLICY Option is set to ON for All SQL Authenticated Logins ')
+			END
+END
+
+
+PRINT ''
+insert into #SecurityDetails values (0, '','')
+
+--5.1 Ensure 'Maximum number of error log files' is set to greater than or equal to '12' (Automated)
+
+
+BEGIN
+
+
+
+DECLARE @NumErrorLogs int;
+EXEC master.sys.xp_instance_regread
+N'HKEY_LOCAL_MACHINE',
+N'Software\Microsoft\MSSQLServer\MSSQLServer',
+N'NumErrorLogs',
+@NumErrorLogs OUTPUT;
+SELECT ISNULL(@NumErrorLogs, -1) AS [NumberOfLogFiles];
+
+
+
+
+
+
+	SELECT @value1 = @NumErrorLogs
+
+
+		IF @value1 >= 12
+
+			BEGIN
+			PRINT ''
+				PRINT '5.1: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (5.1, 'Yes','Ensure Maximum number of error log file is set to greater than or equal to 12 ')
+			END
+
+				Else
+
+			BEGIN
+			PRINT ''
+				PRINT '5.1: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (5.1, 'No','Ensure Maximum number of error log file is set to greater than or equal to 12 ')
+			END
+END
+
+--5.2 Ensure 'Default Trace Enabled' Server Configuration Option is set to '1' (Automated)
+
+SELECT @value = CAST(value_in_use as int)
+FROM sys.configurations
+WHERE name = 'default trace enabled';
+
+SELECT @value1 = CAST(value as int) 
+FROM sys.configurations
+WHERE name = 'default trace enabled';
+
+
+IF @value = 1 AND @value1 = 1
+
+			BEGIN
+		
+				PRINT '5.2: Succesful - Security Compliance has been achieved'
+				insert into #SecurityDetails values (5.2, 'Yes','Ensure Default Trace Enabled Server Configuration Option is set to 1')
+			END
+
+				Else
+
+			BEGIN
+
+				PRINT '5.2: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (5.2, 'No','Ensure Default Trace Enabled Server Configuration Option is set to 1')
+			END
+
+--5.3 Ensure 'Login Auditing' is set to 'failed logins' 
+
+PRINT '5.3 **Manual** Ensure ''Login Auditing'' is set to ''failed logins'
+
+insert into #SecurityDetails values (5.3, 'Manual','Ensure Login Auditing is set to failed logins')
+
+
+
+
+
+--5.4 Ensure 'SQL Server Audit' is set to capture both 'failed' and 'successful logins' (Automated)
+
+
+SELECT 
+ S.name AS 'Audit Name'
+ , CASE S.is_state_enabled
+ WHEN 1 THEN 'Y'
+ WHEN 0 THEN 'N' END AS 'Audit Enabled'
+ , S.type_desc AS 'Write Location'
+ , SA.name AS 'Audit Specification Name'
+ , CASE SA.is_state_enabled
+ WHEN 1 THEN 'Y'
+ WHEN 0 THEN 'N' END AS 'Audit Specification Enabled'
+ , SAD.audit_action_name
+ , SAD.audited_result
+FROM sys.server_audit_specification_details AS SAD
+ JOIN sys.server_audit_specifications AS SA
+ ON SAD.server_specification_id = SA.server_specification_id
+ JOIN sys.server_audits AS S
+ ON SA.audit_guid = S.audit_guid
+WHERE SAD.audit_action_id IN ('CNAU', 'LGFL', 'LGSD');
+
+declare @value12 as int
+SELECT @value12 = @@rowcount
+
+IF @value12 = 3 
+
+			BEGIN
+		
+				PRINT '5.4: Succesful - Security Compliance has been achieved'
+						insert into #SecurityDetails values (5.4, 'Yes',' Ensure SQL Server Audit is set to capture both failed and successful logins')
+			END
+
+				Else
+
+			BEGIN
+
+				PRINT '5.4: Failed - Security Compliance has NOT been achieved'
+						insert into #SecurityDetails values (5.4, 'No',' Ensure SQL Server Audit is set to capture both failed and successful logins')
+			END
+
+PRINT ''
+insert into #SecurityDetails values (0, '','')
+PRINT '6.1 **Manual** Ensure Database and Application User Input is Sanitized (Manual)'
+
+	insert into #SecurityDetails values (6.1, 'Manual','Ensure Database and Application User Input is Sanitized (')
+
+PRINT '6.2 **Manual** Ensure ''CLR Assembly Permission Set'' is set to ''SAFE_ACCESS'' for All CLR Assemblies '
+
+	insert into #SecurityDetails values (6.2, 'Manual','Ensure CLR Assembly Permission Set is set to SAFE_ACCESS for All CLR Assemblies')
+PRINT ''
+	insert into #SecurityDetails values (0, '','')
+--- 7.1 Ensure 'Symmetric Key encryption algorithm' is set to 'AES_128' or higher in non-system databases (Automated)
+
+DECLARE @nameW VARCHAR(50) 
+DECLARE @SQLStringW NVARCHAR(Max) 
+DECLARE @SQLString1W nVARCHAR(Max) 
+
+create table #TemptableSecurityW(DatabaseName nVarchar(max))
+
+
+
+	DECLARE db_cursor CURSOR FOR 
+	SELECT name 
+	FROM MASTER.dbo.sysdatabases 
+	WHERE name NOT IN ('master','model','msdb','tempdb') 
+
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @nameW  
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN 
+
+
+	set @SQLString1W = 'USE [' + @nameW + '];' + ' insert into  #TemptableSecurityW ' +
+	'SELECT db_name()   
+FROM sys.symmetric_keys WHERE algorithm_desc NOT IN (''AES_128'',''AES_192'',''AES_256'') AND db_id() > 4; ' 			
+
+
+				exec(@SQLString1W)
+
+				
+
+			  FETCH NEXT FROM db_cursor INTO @nameW 
+		END 
+
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor 
+
+		
+
+
+
+
+BEGIN
+
+	select *
+from #TemptableSecurityW
+
+	SELECT @value1 = @@rowcount
+
+		IF @value1 = 0
+
+			BEGIN
+				PRINT '7.1: Succesful - Security Compliance has  been achieved'
+				insert into #SecurityDetails values (7.1, 'Yes','Ensure Symmetric Key encryption algorithm is set to AES_128 or higher in non-system databases ')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '7.1: Failed - Security Compliance has NOT been achieved'
+					insert into #SecurityDetails values (7.1, 'No','Ensure Symmetric Key encryption algorithm is set to AES_128 or higher in non-system databases ')
+			END
+
+			drop table #TemptableSecurityW
+
+END
+
+
+--- 7.2 Ensure Asymmetric Key Size is set to 'greater than or equal to 2048' in non-system databases (Automated)
+
+--DECLARE @nameW VARCHAR(50) 
+--DECLARE @SQLStringW NVARCHAR(Max) 
+--DECLARE @SQLString1W nVARCHAR(Max) 
+
+create table #TemptableSecurityE(DatabaseName nVarchar(max))
+
+
+
+	DECLARE db_cursor CURSOR FOR 
+	SELECT name 
+	FROM MASTER.dbo.sysdatabases 
+	WHERE name NOT IN ('master','model','msdb','tempdb') 
+
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @nameW  
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN 
+
+
+	set @SQLString1W = 'USE [' + @nameW + '];' + ' insert into  #TemptableSecurityE ' +
+	'SELECT db_name()  FROM sys.asymmetric_keys   
+WHERE key_length < 2048 AND db_id() > 4; ' 			
+
+
+
+
+
+
+				exec(@SQLString1W)
+
+				
+
+			  FETCH NEXT FROM db_cursor INTO @nameW 
+		END 
+
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor 
+
+		
+
+
+
+
+
+BEGIN
+
+	select *
+from #TemptableSecurityE
+
+	SELECT @value1 = @@rowcount
+
+		IF @value1 = 0
+
+			BEGIN
+				PRINT '7.2: Succesful - Security Compliance has  been achieved'
+				insert into #SecurityDetails values (7.2, 'Yes','Ensure Asymmetric Key Size is set to greater than or equal to 2048 in non-system databases')
+			END
+
+				Else
+
+			BEGIN
+				PRINT '7.2: Failed - Security Compliance has NOT been achieved'
+				insert into #SecurityDetails values (7.2, 'No','Ensure Asymmetric Key Size is set to greater than or equal to 2048 in non-system databases')
+			END
+
+			drop table #TemptableSecurityE
+
+END
+insert into #SecurityDetails values (0, '','')
+
+Print ''
+Print '8.1 **Manual**  Ensure SQL Server Browser Service is configured correctly (Manual)'
+insert into #SecurityDetails values (8.1, 'Manual','Ensure SQL Server Browser Service is configured correctly')
+select @@VERSION
+Select *
+from #SecurityDetails
+
+drop table #SecurityDetails
